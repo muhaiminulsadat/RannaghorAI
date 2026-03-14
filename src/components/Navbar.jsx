@@ -57,13 +57,13 @@ export default function Navbar() {
 
           <div className="hidden md:flex items-center gap-3">
             <Button variant="ghost" asChild className="text-sm font-medium">
-              <Link href="/register">Sign In</Link>
+              <Link href="/login">Sign In</Link>
             </Button>
             <Button
               asChild
               className="text-sm font-medium bg-primary hover:bg-primary/90 text-primary-foreground shadow-lg shadow-primary/25 hover:shadow-primary/40 hover:-translate-y-px transition-all duration-200"
             >
-              <Link href="/get-started">Get Started</Link>
+              <Link href="/register">Get Started</Link>
             </Button>
           </div>
 
@@ -118,7 +118,7 @@ export default function Navbar() {
               asChild
               className="w-full justify-center bg-primary hover:bg-primary/90 text-primary-foreground"
             >
-              <Link href="/get-started" onClick={() => setMobileOpen(false)}>
+              <Link href="/register" onClick={() => setMobileOpen(false)}>
                 Get Started
               </Link>
             </Button>

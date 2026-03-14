@@ -2,6 +2,7 @@ import {Playfair_Display, Inter} from "next/font/google";
 import "./globals.css";
 import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
+import {Toaster} from "@/components/ui/sonner";
 
 const playfair = Playfair_Display({
   variable: "--font-serif",
@@ -26,9 +27,8 @@ export default function RootLayout({children}) {
       <body
         className={`${playfair.variable} ${inter.variable} antialiased dark font-sans`}
       >
-        <Navbar />
-        <main className="min-h-screen">{children}</main>
-        <Footer />
+        <main className="min-h-screen ">{children}</main>
+        <Toaster richColors theme="dark" position="bottom-right" />
       </body>
     </html>
   );
