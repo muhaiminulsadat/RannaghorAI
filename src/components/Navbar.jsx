@@ -2,13 +2,27 @@
 
 import {useState, useEffect} from "react";
 import Link from "next/link";
-import {BookOpen, ShoppingBasket, ChefHat, Menu, X, Flame} from "lucide-react";
+import {
+  BookOpen,
+  ShoppingBasket,
+  ChefHat,
+  Menu,
+  X,
+  Flame,
+  LayoutDashboard,
+  LogOut,
+} from "lucide-react";
 import {Button} from "@/components/ui/button";
 import {cn} from "@/lib/utils";
+import {authClient} from "@/lib/auth-client";
+import {useRouter} from "next/navigation";
+import {toast} from "sonner";
 
 export default function Navbar() {
   const [scrolled, setScrolled] = useState(false);
   const [mobileOpen, setMobileOpen] = useState(false);
+  const {data: session} = authClient.useSession();
+  const router = useRouter();
 
   useEffect(() => {
     const handleScroll = () => setScrolled(window.scrollY > 10);
@@ -21,6 +35,20 @@ export default function Navbar() {
     {href: "/my-pantry", label: "My Pantry", icon: ShoppingBasket},
     {href: "/how-to-cook", label: "How to Cook?", icon: ChefHat},
   ];
+
+  const handleLogout = async () => {
+    await authClient.signOut({
+      fetchOptions: {
+        onSuccess: () => {
+          toast.success("Logged out successfully");
+          router.push("/login");
+        },
+        onError: (ctx) => {
+          toast.error(ctx.error.message);
+        },
+      },
+    });
+  };
 
   return (
     <header
@@ -56,15 +84,36 @@ export default function Navbar() {
           </nav>
 
           <div className="hidden md:flex items-center gap-3">
-            <Button variant="ghost" asChild className="text-sm font-medium">
-              <Link href="/login">Sign In</Link>
-            </Button>
-            <Button
-              asChild
-              className="text-sm font-medium bg-primary hover:bg-primary/90 text-primary-foreground shadow-lg shadow-primary/25 hover:shadow-primary/40 hover:-translate-y-px transition-all duration-200"
-            >
-              <Link href="/register">Get Started</Link>
-            </Button>
+            {session ? (
+              <>
+                <Button
+                  variant="ghost"
+                  asChild
+                  className="text-sm font-medium gap-2"
+                >
+                  <Link href="/dashboard">
+                    <LayoutDashboard className="w-4 h-4" />
+                    Dashboard
+                  </Link>
+                </Button>
+                <Button onClick={handleLogout} variant="destructive">
+                  <LogOut className="w-4 h-4" />
+                  Logout
+                </Button>
+              </>
+            ) : (
+              <>
+                <Button variant="ghost" asChild className="text-sm font-medium">
+                  <Link href="/login">Sign In</Link>
+                </Button>
+                <Button
+                  asChild
+                  className="text-sm font-medium bg-primary hover:bg-primary/90 text-primary-foreground shadow-lg shadow-primary/25 hover:shadow-primary/40 hover:-translate-y-px transition-all duration-200"
+                >
+                  <Link href="/register">Get Started</Link>
+                </Button>
+              </>
+            )}
           </div>
 
           <button
@@ -109,19 +158,50 @@ export default function Navbar() {
             ))}
           </div>
           <div className="pt-4 mt-3 border-t border-border flex flex-col gap-2">
-            <Button variant="ghost" asChild className="w-full justify-center">
-              <Link href="/login" onClick={() => setMobileOpen(false)}>
-                Sign In
-              </Link>
-            </Button>
-            <Button
-              asChild
-              className="w-full justify-center bg-primary hover:bg-primary/90 text-primary-foreground"
-            >
-              <Link href="/register" onClick={() => setMobileOpen(false)}>
-                Get Started
-              </Link>
-            </Button>
+            {session ? (
+              <>
+                <Button
+                  variant="ghost"
+                  asChild
+                  className="w-full justify-center gap-2"
+                >
+                  <Link href="/dashboard" onClick={() => setMobileOpen(false)}>
+                    <LayoutDashboard className="w-4 h-4" />
+                    Dashboard
+                  </Link>
+                </Button>
+                <Button
+                  onClick={() => {
+                    handleLogout();
+                    setMobileOpen(false);
+                  }}
+                  className="w-full justify-center gap-2 bg-muted hover:bg-muted/80 text-foreground border border-border shadow-none"
+                >
+                  <LogOut className="w-4 h-4" />
+                  Logout
+                </Button>
+              </>
+            ) : (
+              <>
+                <Button
+                  variant="ghost"
+                  asChild
+                  className="w-full justify-center"
+                >
+                  <Link href="/login" onClick={() => setMobileOpen(false)}>
+                    Sign In
+                  </Link>
+                </Button>
+                <Button
+                  asChild
+                  className="w-full justify-center bg-primary hover:bg-primary/90 text-primary-foreground"
+                >
+                  <Link href="/register" onClick={() => setMobileOpen(false)}>
+                    Get Started
+                  </Link>
+                </Button>
+              </>
+            )}
           </div>
         </div>
       </div>

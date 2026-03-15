@@ -11,6 +11,8 @@ import {Input} from "@/components/ui/input";
 import {Label} from "@/components/ui/label";
 import {cn} from "@/lib/utils";
 import {toast} from "sonner";
+import {useRouter} from "next/navigation";
+import {authClient} from "@/lib/auth-client";
 
 const loginSchema = z.object({
   email: z.string().email("Please enter a valid email"),
@@ -29,14 +31,23 @@ export default function LoginPage() {
     resolver: zodResolver(loginSchema),
   });
 
-  const onSubmit = async (data) => {
-    setIsLoading(true);
-    await new Promise((r) => setTimeout(r, 1500));
-    console.log(data);
-toast.success("You are successfully loggedin");
-    setIsLoading(false);
-  };
+  const router = useRouter();
 
+  const onSubmit = async (formData) => {
+    await authClient.signIn.email(formData, {
+      onRequest: () => {
+        setIsLoading(true);
+      },
+      onSuccess: () => {
+        toast.success("Welcome back to Rannaghor 🍛");
+        router.push("/");
+      },
+      onError: (ctx) => {
+        toast.error(ctx.error.message || "Invalid email or password");
+        setIsLoading(false);
+      },
+    });
+  };
   return (
     <div className="min-h-screen bg-background flex">
       <div

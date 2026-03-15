@@ -19,6 +19,9 @@ import {Button} from "@/components/ui/button";
 import {Input} from "@/components/ui/input";
 import {Label} from "@/components/ui/label";
 import {cn} from "@/lib/utils";
+import {useRouter} from "next/navigation";
+import {authClient} from "@/lib/auth-client";
+import {toast} from "sonner";
 
 const signupSchema = z
   .object({
@@ -45,13 +48,31 @@ export default function SignupPage() {
     resolver: zodResolver(signupSchema),
   });
 
+  const router = useRouter();
+
   const onSubmit = async (data) => {
     setIsLoading(true);
-    await new Promise((r) => setTimeout(r, 1500));
-    console.log(data);
-    setIsLoading(false);
-  };
 
+    try {
+      const {error} = await authClient.signUp.email({
+        name: data.name,
+        email: data.email,
+        password: data.password,
+      });
+
+      if (error) {
+        toast.error(error.message || "Something went wrong. Please try again.");
+        return;
+      }
+
+      toast.success("Account created! Welcome to Rannaghor 🍛");
+      router.push("/");
+    } catch (err) {
+      toast.error("Network error. Please check your connection and try again.");
+    } finally {
+      setIsLoading(false);
+    }
+  };
   return (
     <div className="min-h-screen bg-background flex">
       <div className="hidden lg:flex lg:w-1/2 relative overflow-hidden bg-[#0f0d0b]">

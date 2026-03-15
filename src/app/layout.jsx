@@ -28,7 +28,7 @@ export default function RootLayout({children}) {
         className={`${playfair.variable} ${inter.variable} antialiased dark font-sans`}
       >
         <main className="min-h-screen ">{children}</main>
-        <Toaster richColors theme="dark" position="bottom-right" />
+        <Toaster richColors theme="dark" position="top-center" />
       </body>
     </html>
   );
