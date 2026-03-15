@@ -15,13 +15,19 @@ export const auth = betterAuth({
   database: mongodbAdapter(db, {
     client,
   }),
-  
+
   trustedOrigins: ["**"],
 
   session: {
     cookieCache: {
       enabled: true,
       maxAge: 60 * 60,
+    },
+  },
+
+  user: {
+    additionalFields: {
+      subscriptionTier: {type: "string", required: false, defaultValue: "free"},
     },
   },
 
