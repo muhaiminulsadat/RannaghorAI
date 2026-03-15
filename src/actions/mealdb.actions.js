@@ -6,7 +6,7 @@ const MEALDB_BASE = "https://www.themealdb.com/api/json/v1/1";
 export async function getRecipeOfTheDay() {
   try {
     const response = await fetch(`${MEALDB_BASE}/random.php`, {
-      next: {revalidate: 86400}, // Cache for 24 hours
+      next: {revalidate: 86400},
     });
 
     if (!response.ok) {
@@ -81,7 +81,7 @@ export async function getMealsByCategory(category) {
     const response = await fetch(
       `${MEALDB_BASE}/filter.php?c=${encodeURIComponent(category)}`,
       {
-        next: {revalidate: 86400}, // Cache for 24 hours
+        next: {revalidate: 86400},
       },
     );
 

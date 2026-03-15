@@ -80,3 +80,5 @@ export const STATS = [
   {number: "12K+", label: "Happy Cooks"},
   {number: "4.9", label: "App Rating"},
 ];
+
+
