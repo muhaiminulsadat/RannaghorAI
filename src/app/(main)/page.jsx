@@ -17,7 +17,7 @@ import {TESTIMONIALS, FEATURES, STATS} from "@/constants/constants";
 export default function LandingPage() {
   return (
     <div className="min-h-screen bg-background overflow-x-hidden">
-      <section className="relative min-h-screen flex items-center justify-center px-4 pt-15">
+      <section className="relative min-h-screen flex items-center justify-center px-4 pt-20">
         <div
           className="absolute inset-0 pointer-events-none"
           style={{
@@ -168,6 +168,8 @@ export default function LandingPage() {
         </div>
       </section>
 
+      {/* ---------------------------------------------- */}
+
       <section className="py-24 px-4 relative overflow-hidden">
         <div className="max-w-7xl mx-auto">
           <div
@@ -294,6 +296,8 @@ export default function LandingPage() {
           </div>
         </div>
       </section>
+
+      {/* -------------------------------------------------- */}
 
       <section className="py-24 px-4">
         <div className="max-w-7xl mx-auto">
